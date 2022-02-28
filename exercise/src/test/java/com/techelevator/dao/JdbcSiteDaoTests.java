@@ -25,7 +25,6 @@ public class JdbcSiteDaoTests extends BaseDaoTests {
     }
 
     public void getAvailableSites_Should_ReturnSites() {
-
     }
 
     public void getAvailableSitesDateRange_Should_ReturnSites() {

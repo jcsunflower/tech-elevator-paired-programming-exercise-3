@@ -18,7 +18,16 @@ public class JdbcParkDao implements ParkDao {
 
     @Override
     public List<Park> getAllParks() {
-        return new ArrayList<>();
+        List<Park> parks = new ArrayList<>();
+        String sql = "SELECT park_id, park.name, park.location, establish_date, area, visitors, description\n" +
+                "FROM park\n" +
+                "ORDER BY park.location ASC;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()){
+            Park park = mapRowToPark(results);
+            parks.add(park);
+        }
+        return parks;
     }
 
     private Park mapRowToPark(SqlRowSet results) {

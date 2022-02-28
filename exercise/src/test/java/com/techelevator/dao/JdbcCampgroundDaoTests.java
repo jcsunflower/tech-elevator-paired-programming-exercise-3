@@ -20,7 +20,6 @@ public class JdbcCampgroundDaoTests extends BaseDaoTests {
     @Test
     public void getCampgrounds_Should_ReturnAllCampgrounds() {
         List<Campground> campgrounds = dao.getCampgroundsByParkId(1);
-
         assertEquals(2,campgrounds.size());
     }
 

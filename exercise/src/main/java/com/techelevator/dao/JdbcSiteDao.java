@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcSiteDao implements SiteDao {
+public class   JdbcSiteDao implements SiteDao {
 
     private JdbcTemplate jdbcTemplate;
 
@@ -18,7 +18,16 @@ public class JdbcSiteDao implements SiteDao {
 
     @Override
     public List<Site> getSitesThatAllowRVs(int parkId) {
-        return new ArrayList<>();
+        List<Site> sites = new ArrayList();
+        String sql = "SELECT site_id, campground_id, site_number, max_occupancy, accessible, max_rv_length, utilities\n" +
+                "FROM site\n" +
+                "WHERE max_rv_length != 0;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()){
+            Site site = mapRowToSite(results);
+            sites.add(site);
+        }
+        return sites;
     }
 
     private Site mapRowToSite(SqlRowSet results) {
