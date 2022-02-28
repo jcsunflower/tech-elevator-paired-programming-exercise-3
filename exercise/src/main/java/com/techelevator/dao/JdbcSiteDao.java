@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +32,19 @@ public class   JdbcSiteDao implements SiteDao {
     }
 
     @Override
-    public List<Site> getCurrentlyAvailableSites(int parkId) {
+    public List<Site> getCurrentlyAvailableSites(int parkId, LocalDate toDate, LocalDate fromDate) {
         List<Site> sites = new ArrayList<>();
-        String sql = "SELECT site_id, campground_id, site_number, max_occupancy, accessible, max_rv_length, utilities " +
+        String sql = "SELECT site_id, site.campground_id, site_number, max_occupancy, accessible, max_rv_length, utilities " +
                 "FROM site " +
-                "JOIN ";
+                "JOIN campground ON campground.campground_id = site.campground_id " +
+                "WHERE campground.park_id = ? AND site_id NOT IN " +
+                "(SELECT DISTINCT site_id FROM reservation WHERE (from_date, to_date) OVERLAPS (?, ?));";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, parkId, fromDate, toDate);
+
+        while (results.next()) {
+            Site site = mapRowToSite(results);
+            sites.add(site);
+        }
         return sites;
     }
 

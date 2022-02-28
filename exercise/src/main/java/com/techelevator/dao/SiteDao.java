@@ -9,5 +9,5 @@ public interface SiteDao {
 
     List<Site> getSitesThatAllowRVs(int parkId);
 
-    List<Site> getCurrentlyAvailableSites(int parkId);
+    List<Site> getCurrentlyAvailableSites(int parkId, LocalDate fromDate, LocalDate toDate);
 }
