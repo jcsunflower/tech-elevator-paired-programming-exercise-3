@@ -1,9 +1,12 @@
 package com.techelevator.dao;
 
+import com.techelevator.model.Reservation;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,6 +27,14 @@ public class JdbcReservationDaoTests extends BaseDaoTests {
                 LocalDate.now().plusDays(3));
 
         assertEquals(5, reservationCreated);
+    }
+
+    @Test
+    public void upcomingReservations_Should_Return_All_Reservations_For_Park_ID() {
+        int expectedSize = 2;
+        List<Reservation> actualReservations = dao.upcomingReservations(1);
+
+        Assert.assertEquals(expectedSize, actualReservations.size());
     }
 
 }
